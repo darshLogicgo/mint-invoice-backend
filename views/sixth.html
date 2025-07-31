@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice Maker - Modern Invoice</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f6fafd 0%, #eaf1fb 100%);
+      min-height: 100vh;
+      font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .invoice-wrapper {
+      max-width: 800px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 32px;
+      box-shadow: 0 8px 32px rgba(35,136,255,0.10);
+      padding: 40px 32px 32px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+    .header-left {
+      background: linear-gradient(120deg, #eaf4ff 60%, #dbeaff 100%);
+      border-radius: 20px;
+      padding: 32px 36px 24px 36px;
+      min-width: 340px;
+      box-shadow: 0 2px 12px rgba(35,136,255,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .header-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .header-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(35,136,255,0.10);
+    }
+    .header-logo img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #222;
+    }
+    .header-email {
+      font-size: 1rem;
+      color: #2388ff;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+    .header-right {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(35,136,255,0.08);
+      padding: 24px 32px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .profile-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 8px;
+      border: 2px solid #e3efff;
+    }
+    .amount-label {
+      color: #6b7280;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .amount-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2388ff;
+      margin-bottom: 0;
+    }
+    .amount-currency {
+      color: #6b7280;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .invoice-meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .meta-box {
+      background: #f6fafd;
+      border-radius: 14px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      color: #2388ff;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      flex: 1;
+      justify-content: center;
+    }
+    .meta-label {
+      color: #6b7280;
+      font-weight: 500;
+      margin-right: 4px;
+    }
+    .meta-value {
+      color: #2388ff;
+      font-weight: 700;
+    }
+    .info-row {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .info-card {
+      background: #f6fafd;
+      border-radius: 16px;
+      padding: 18px 24px;
+      flex: 1;
+      min-width: 0;
+      box-shadow: 0 1px 4px rgba(35,136,255,0.04);
+    }
+    .info-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2388ff;
+      margin-bottom: 6px;
+    }
+    .info-detail {
+      font-size: 1rem;
+      color: #222;
+      margin-bottom: 2px;
+    }
+    .info-email {
+      color: #2388ff;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .invoice-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 24px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(35,136,255,0.06);
+      overflow: hidden;
+    }
+    .invoice-table th {
+      background: #f6fafd;
+      color: #6b7280;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e3efff;
+    }
+    .invoice-table td {
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: #222;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .invoice-table tr:last-child td {
+      border-bottom: none;
+    }
+    .desc-col {
+      font-weight: 500;
+      color: #222;
+    }
+    .qty-col, .price-col {
+      color: #6b7280;
+      text-align: center;
+    }
+    .total-col {
+      color: #2388ff;
+      font-weight: 700;
+      text-align: right;
+    }
+    .table-total-row td {
+      background: #f6fafd;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2388ff;
+      border-radius: 0 0 18px 18px;
+      border-bottom: none;
+    }
+    .terms-section {
+      margin-top: 32px;
+      font-size: 0.95rem;
+      color: #6b7280;
+      background: #f6fafd;
+      border-radius: 12px;
+      padding: 18px 24px;
+    }
+    .terms-title {
+      font-weight: 700;
+      color: #2388ff;
+      margin-bottom: 6px;
+    }
+    @media (max-width: 900px) {
+      .invoice-wrapper { padding: 16px 4vw; }
+      .invoice-header { flex-direction: column; gap: 24px; }
+      .header-left, .header-right { min-width: 0; width: 100%; }
+      .invoice-meta-row, .info-row { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-wrapper">
+    <div class="invoice-header">
+      <div class="header-left">
+        <div class="header-logo-row">
+          <div class="header-logo">
+            <img src="/public/mint-invoice-icon.png" alt="Logo" />
+          </div>
+          <span class="header-title">Invoice Maker</span>
+        </div>
+        <div class="header-email">contact@mintinvoice.com</div>
+      </div>
+      <div class="header-right">
+        <img class="profile-img" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" />
+        <div class="amount-label">Total amount:</div>
+        <div class="amount-value">19,570.00</div>
+        <div class="amount-currency">$ USD</div>
+      </div>
+    </div>
+    <div class="invoice-meta-row">
+      <div class="meta-box"><span class="meta-label">Invoice number:</span> <span class="meta-value">N° 000027</span></div>
+      <div class="meta-box"><span class="meta-label">Issued:</span> <span class="meta-value">June 26, 2024</span></div>
+      <div class="meta-box"><span class="meta-label">Due date:</span> <span class="meta-value">July 26, 2024</span></div>
+    </div>
+    <div class="info-row">
+      <div class="info-card">
+        <div class="info-title">Mauro Sicard</div>
+        <div class="info-detail">(612) 856-0989</div>
+        <div class="info-detail">Pablo Alto, San Francisco, CA 92102, United States of America</div>
+        <div class="info-email">contact@maurosicard.com</div>
+      </div>
+      <div class="info-card">
+        <div class="info-title">Mint invoice</div>
+        <div class="info-detail">(684) 879-0102</div>
+        <div class="info-detail">Pablo Alto, San Francisco, CA 94109, United States of America</div>
+        <div class="info-email">info@mintinvoice.com</div>
+      </div>
+    </div>
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>DESCRIPTION</th>
+          <th>QTY</th>
+          <th>PRICE</th>
+          <th>TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="desc-col">Web design</td>
+          <td class="qty-col">1</td>
+          <td class="price-col">$ 5,250.00</td>
+          <td class="total-col">$ 5,250.00</td>
+        </tr>
+        <tr>
+          <td class="desc-col">Brand book design</td>
+          <td class="qty-col">1</td>
+          <td class="price-col">$ 2,750.00</td>
+          <td class="total-col">$ 2,750.00</td>
+        </tr>
+        <tr>
+          <td class="desc-col">UI/UX app design</td>
+          <td class="qty-col">1</td>
+          <td class="price-col">$ 7,520.00</td>
+          <td class="total-col">$ 7,520.00</td>
+        </tr>
+        <tr>
+          <td class="desc-col">SEO & SEM optimization</td>
+          <td class="qty-col">1</td>
+          <td class="price-col">$ 2,800.00</td>
+          <td class="total-col">$ 2,800.00</td>
+        </tr>
+        <tr>
+          <td class="desc-col">Website speed optimization</td>
+          <td class="qty-col">1</td>
+          <td class="price-col">$ 1,250.00</td>
+          <td class="total-col">$ 1,250.00</td>
+        </tr>
+        <tr class="table-total-row">
+          <td colspan="3" style="text-align:right;">TOTAL AMOUNT:</td>
+          <td>$ 19,570.00</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="terms-section">
+      <div class="terms-title">Terms &amp; Conditions:</div>
+      <div>
+        Payment for services will be established in the agreement. Please make payment by the due date. For any questions regarding this invoice, contact us at the email address or phone number listed above. Late payments may be subject to a fee as specified in our agreement.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

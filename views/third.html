@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professional Invoice</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #ffffff;
+        color: #333333;
+        line-height: 1.6;
+      }
+
+      .invoice-container {
+        width: 210mm;
+        height: 330mm;
+        margin: 0 auto;
+        background: #f9f9f9;
+        padding: 15mm;
+        position: relative;
+      }
+
+      /* Header Section */
+      .header {
+        background: #000000;
+        padding: 25px 30px;
+        border-radius: 22px 22px 0 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+      }
+
+      .company-title {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      /* Invoice Details Section */
+      .invoice-details-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 30px;
+        /* margin-bottom: 30px; */
+      }
+
+      .detail-box {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+
+      .detail-label {
+        font-size: 14px;
+        color: gray;
+        margin-bottom: 10px;
+        font-weight: 400;
+      }
+
+      .detail-value {
+        font-size: 16px;
+        color: #000000;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .detail-info {
+        font-size: 12px;
+        color: gray;
+        font-weight: 400;
+        line-height: 1.4;
+      }
+
+      .info-label {
+        font-size: 12px;
+        font-weight: 400;
+        color: gray;
+      }
+
+      .info-value-bold {
+        font-size: 13px;
+        font-weight: 600;
+        color: gray;
+        font-weight: 600;
+      }
+
+      .invoice-number-section {
+        text-align: right;
+      }
+
+      .invoice-number-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #000000;
+        margin-bottom: 15px;
+      }
+
+      .invoice-number {
+        font-size: 20px;
+        color: #000000;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      .date-info {
+        text-align: right;
+      }
+
+      .date-item {
+        font-size: 12px;
+        color: gray;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .date-label {
+        font-weight: 400;
+        color: gray;
+      }
+
+      .date-value {
+        font-weight: 400;
+        color: gray;
+      }
+
+      /* Table Section */
+      .table-container {
+        margin-bottom: 30px;
+      }
+
+      .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .invoice-table th {
+        padding: 15px 10px;
+        text-align: left;
+        font-size: 12px;
+        color: gray;
+        font-weight: normal;
+        border-bottom: 2px solid #000000;
+      }
+
+      .invoice-table th:nth-child(2),
+      .invoice-table th:nth-child(3),
+      .invoice-table th:nth-child(4),
+      .invoice-table th:nth-child(5),
+      .invoice-table th:nth-child(6) {
+        text-align: center;
+      }
+
+      .invoice-table th, .invoice-table td {
+        padding: 15px 10px;
+        font-size: 14px;
+        border-bottom: 1px solid #e9ecef;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
+        max-width: 250px;
+      }
+      .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+      }
+      .table-container {
+        margin-bottom: 30px;
+        overflow-x: auto;
+      }
+      .item-name, .detail-value, .detail-info {
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+      .invoice-details-section, .footer {
+        flex-wrap: wrap;
+      }
+
+      .invoice-table tbody tr:nth-child(odd) td {
+        background: #ffffff;
+      }
+
+      .invoice-table tbody tr:nth-child(even) td {
+        background: #f6f8fc;
+      }
+
+      .invoice-table tbody tr:last-child td {
+        border-bottom: 2px solid #000000;
+      }
+
+      .item-name {
+        color: #000000;
+        font-weight: 600;
+      }
+
+      .rate,
+      .discount,
+      .qty,
+      .tax {
+        text-align: center;
+        color: gray;
+        font-weight: 500;
+      }
+
+      .amount {
+        text-align: center;
+        color: #000000;
+        font-weight: 600;
+      }
+
+      /* Payment and Summary Section */
+      .payment-summary-section {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 30px;
+      }
+
+      /* Financial Summary */
+      .financial-summary {
+        /* padding: 20px; */
+        background: #f8f9fa;
+        border-radius: 8px;
+        width: 350px;
+      }
+
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 12px 5px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .summary-item:last-of-type {
+        border-bottom: none;
+      }
+
+      .summary-label {
+        color: #000000;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .summary-value {
+        color: #000000;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .due-amount {
+        font-size: 14px;
+        font-weight: bold;
+        color: #000000;
+      }
+
+      .total-line {
+        border-top: 2px solid #000000;
+        border-bottom: 2px solid #000000;
+        /* margin: 15px 0; */
+        padding: 15px 5px;
+        background: #efefef;
+        /* border-radius: 4px; */
+      }
+
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: left;
+      }
+
+      .total-label {
+        font-size: 14px;
+        color: #000000;
+        font-weight: bold;
+      }
+
+      .total-amount {
+        font-size: 14px;
+        font-weight: bold;
+        color: #000000;
+      }
+
+              /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 40px;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .policy-notes {
+            font-size: 12px;
+            color: gray;
+            line-height: 1.4;
+        }
+
+        .policy-item {
+            margin-bottom: 5px;
+        }
+
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .signature-box {
+            width: 120px;
+            height: 60px;
+            border: 2px solid #000000;
+            border-radius: 4px;
+            background: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .signature-section {
+            text-align: center;
+        }
+
+        .signature {
+            font-size: 18px;
+            color: #000000;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .signature-label {
+            font-size: 10px;
+            color: #000000;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .company-name-footer {
+            font-size: 12px;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            width: 30px;
+            height: 30px;
+            background: #01b763;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .powered-by {
+            font-size: 10px;
+            color: #868da6;
+        }
+
+        .branding-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .invoice-icon {
+            width: 40px;
+            height: 30px;
+            background: white;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 12px;
+            height: 12px;
+            background: #01b763;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 8px;
+        }
+
+        .dollar-sign {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            color: #01b763;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .text-lines {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            right: 4px;
+            height: 8px;
+        }
+
+        .text-line {
+            height: 1px;
+            background: #e0e0e0;
+            margin-bottom: 1px;
+        }
+
+        .branding-text {
+            font-size: 12px;
+            color: gray;
+            font-weight: normal;
+        }
+
+      /* Print Styles */
+      @media print {
+        body {
+          margin: 0;
+          padding: 0;
+        }
+
+        .invoice-container {
+          width: 210mm;
+          height: 297mm;
+          margin: 0;
+          padding: 15mm;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">
+          <img
+            src="/public/mint-invoice-icon.png"
+            alt="Invoice"
+            style="height: 50px"
+          />
+        </div>
+        <div class="company-title">INVOICE MAKER</div>
+      </div>
+
+      <!-- Invoice Details Section -->
+      <div class="invoice-details-section">
+        <div class="detail-box">
+          <div class="detail-label">Invoice From:</div>
+          <div class="detail-value">Zayn Rafi</div>
+          <!-- <div class="detail-info">
+            Ph.No: +93 93 904 093<br />
+            304 - xyz. Varachha road<br />
+            Surat, 395006<br />
+            name@email.com
+          </div> -->
+          <div class="detail-info">
+            <span class="info-label">Ph.No:</span>
+            <span class="info-value-bold">+93 93 904 093</span><br />
+            304 - xyz. Varachha road<br />
+            Surat, 395006<br />
+            name@email.com
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <div class="detail-label">Invoice To:</div>
+          <div class="detail-value">Zayn Rafi</div>
+          <!-- <div class="detail-info">
+            Ph.No: +93 93 904 093<br />
+            304 - xyz. Varachha road<br />
+            Surat, 395006<br />
+            name@email.com
+          </div> -->
+          <div class="detail-info">
+            <span class="info-label">Ph.No:</span>
+            <span class="info-value-bold">+93 93 904 093</span><br />
+            304 - xyz. Varachha road<br />
+            Surat, 395006<br />
+            name@email.com
+          </div>
+        </div>
+
+        <div class="detail-box invoice-number-section">
+          <div class="invoice-number-title">INVOICE</div>
+          <div class="invoice-number">INV - 1001</div>
+          <div class="date-info">
+            <div class="date-item">
+              <span class="date-label">Invoice Date :</span>
+              <span class="date-value">22 Jan 2025</span>
+            </div>
+            <div class="date-item">
+              <span class="date-label">Due Date :</span>
+              <span class="date-value">01 Feb 2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Section -->
+      <div class="table-container">
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>ITEM</th>
+              <th>RATE</th>
+              <th>DISCOUNT</th>
+              <th>QTY</th>
+              <th>TAX</th>
+              <th>AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="item-name">Branding Design</td>
+              <td class="rate">$350.0</td>
+              <td class="discount">5.00%</td>
+              <td class="qty">1</td>
+              <td class="tax">30%</td>
+              <td class="amount">$99.75</td>
+            </tr>
+            <tr>
+              <td class="item-name">Brand Identity Book</td>
+              <td class="rate">$150.0</td>
+              <td class="discount">10.00%</td>
+              <td class="qty">3</td>
+              <td class="tax">5%</td>
+              <td class="amount">$384.75</td>
+            </tr>
+            <tr>
+              <td class="item-name">Calendar Design</td>
+              <td class="rate">$150.0</td>
+              <td class="discount">5.00%</td>
+              <td class="qty">1</td>
+              <td class="tax">10%</td>
+              <td class="amount">$200.00</td>
+            </tr>
+            <tr>
+              <td class="item-name">Postcard Design</td>
+              <td class="rate">$150.0</td>
+              <td class="discount">0.00%</td>
+              <td class="qty">5</td>
+              <td class="tax">5%</td>
+              <td class="amount">$1852.50</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Payment and Summary Section -->
+      <div class="payment-summary-section">
+        <div class="financial-summary">
+          <div class="summary-item">
+            <span class="summary-label">Estimated Discount</span>
+            <span class="summary-value">-$30.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Gst (5%)</span>
+            <span class="summary-value">-$62.25</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Shipping Charge</span>
+            <span class="summary-value">+$30.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Received Amount</span>
+            <span class="summary-value">-$900.0</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Due Amount</span>
+            <span class="summary-value due-amount">$10,990</span>
+          </div>
+
+          <div class="total-line">
+            <div class="total-row">
+              <span class="total-label">TOTAL</span>
+              <span class="total-amount">$1,995.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+              <!-- Footer -->
+        <div class="footer">
+            <div class="footer-left">
+                <div class="policy-notes">
+                    <div class="policy-item">1. Bills should be pay within 30 days</div>
+                    <div class="policy-item">2. No exchange policy</div>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="signature-section">
+                    <div class="signature-box"></div>
+                    <div class="signature">James Foster</div>
+                    <div class="signature-label">AUTHORISED SIGNATORY FOR</div>
+                    <div class="company-name-footer">Invoice Business</div>
+                </div>
+                        </div>
+        </div>
+
+        <!-- Branding Section -->
+        <div class="branding-section">
+            <div class="invoice-icon">
+                <div class="checkmark">✓</div>
+                <div class="dollar-sign">$</div>
+                <div class="text-lines">
+                    <div class="text-line"></div>
+                    <div class="text-line"></div>
+                    <div class="text-line"></div>
+                </div>
+            </div>
+            <div class="branding-text">Powered by Mint Invoice</div>
+        </div>
+    </div>
+</body>
+</html>

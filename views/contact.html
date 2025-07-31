@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Contact Message</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #f9f9f9; font-family: 'Segoe UI', Roboto, sans-serif; color: #333;">
+
+    <table align="center" width="100%" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+      <tr>
+        <td style="text-align: center; padding: 20px 0;">
+          <img src="https://invoice-maker-template-logo-url.com/logo.png" alt="Invoice Maker" style="height: 40px;" />
+        </td>
+      </tr>
+
+      <tr>
+        <td style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 30px;">
+          <h2 style="margin-top: 0; color: #00b979;">📩 New Contact Form Submission</h2>
+
+          <p style="margin: 20px 0 5px; font-weight: 600;">Name:</p>
+          <p style="margin: 0; background: #f4f4f4; padding: 10px 15px; border-radius: 5px;">
+            <%= fullName %>
+          </p>
+
+          <p style="margin: 20px 0 5px; font-weight: 600;">Subject:</p>
+          <p style="margin: 0; background: #f4f4f4; padding: 10px 15px; border-radius: 5px;">
+            <%= subject %>
+          </p>
+
+          <p style="margin: 20px 0 5px; font-weight: 600;">Message:</p>
+          <p style="margin: 0; background: #f4f4f4; padding: 15px; border-radius: 5px;">
+            <%= message %>
+          </p>
+
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;" />
+
+          <p style="font-size: 14px; color: #888; text-align: center;">
+            You received this message from the contact form on your Invoice Maker website.
+          </p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="text-align: center; font-size: 13px; color: #aaa; padding: 20px 0;">
+          © <%= new Date().getFullYear() %> Invoice Maker. All rights reserved.
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

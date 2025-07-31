@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mint Invoice - Professional Invoice</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #ffffff;
+        color: #333333;
+        line-height: 1.6;
+      }
+      /* .floating-logo-container {
+        position: absolute;
+        top: 120px;
+        left: 10px;
+        transform: translateY(-50%);
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      } */
+
+      .floating-logo-container {
+        position: absolute;
+        top: 11%; /* Adjust as needed for overlap */
+        left: 12%; /* Adjust as needed */
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 200px;
+      }
+      /* .logo-box {
+        width: 120px;
+        height: 100px;
+        background: white;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      } */
+
+      .logo-box {
+        width: 100%;
+        height: 120px;
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .logo-image {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        margin-bottom: 35px;
+        border-radius: 10px;
+      }
+
+      .logo-label {
+        margin-top: 8px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+        text-align: center;
+        position: absolute;
+        bottom: 2px;
+      }
+
+      .invoice-container {
+        width: 250mm;
+        height: 330mm;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 20mm;
+        position: relative;
+      }
+
+      /* Header Section */
+      .header {
+        background: #2388ff;
+        padding: 30px;
+        border-radius: 12px;
+        color: white;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Bubbles */
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        width: 100px;
+        height: 100px;
+        background: #4e9fff;
+        border-radius: 50%;
+        opacity: 0.3;
+      }
+
+      .header::after {
+        content: "";
+        position: absolute;
+        bottom: -30px;
+        left: 50px;
+        width: 80px;
+        height: 80px;
+        background: #4e9fff;
+        border-radius: 50%;
+        opacity: 0.2;
+      }
+
+      .header-top {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .logo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* .logo-box {
+        width: 80px;
+        height: 60px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      } */
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: #10b981;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        position: relative;
+      }
+
+      .logo-text {
+        position: absolute;
+        bottom: 2px;
+        left: 2px;
+        right: 2px;
+        background: #059669;
+        color: white;
+        font-size: 8px;
+        text-align: center;
+        padding: 2px;
+        border-radius: 2px;
+      }
+
+      .company-info {
+        display: flex;
+        justify-content: left;
+        align-items: flex-start;
+        gap: 30px;
+        color: white;
+        width: 100%;
+        margin-left: 200px; /* pushes text to right of the logo box */
+      }
+
+      .company-left {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .company-title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .company-details {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .company-address {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 220px;
+        text-align: left;
+      }
+
+      .company-name {
+        font-size: 16px;
+        font-weight: bold;
+        color: #111827;
+      }
+
+      .company-details {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .invoice-number {
+        background: white;
+        padding: 8px 16px;
+        border-radius: 28px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: auto;
+        color: #2388ff;
+        text-align: center;
+        min-width: 120px;
+      }
+
+      .header-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .contact-info {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.4;
+      }
+
+      /* Bill To and Date Section */
+      .bill-date-section {
+        display: flex;
+        gap: 32px;
+        margin-bottom: 30px;
+        padding: 0 10px;
+        background: #f9fafb;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px rgba(35,136,255,0.06);
+        /* border-left: 6px solid #2388ff; */
+        align-items: flex-start;
+      }
+      .bill-to-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 24px 18px 24px 0;
+      }
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        font-weight: bold;
+        color: #19213d;
+        margin-bottom: 5px;
+      }
+      .section-icon {
+        width: 22px;
+        height: 22px;
+        background: #e3efff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2388ff;
+        font-size: 13px;
+      }
+      .client-info {
+        font-size: 14px;
+        color: #5d6481;
+        line-height: 1.5;
+      }
+      .client-name {
+        font-weight: bold;
+        color: #19213d;
+        margin-bottom: 5px;
+      }
+
+      /* Table Section */
+      .table-container {
+        margin-bottom: 30px;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .invoice-table th  {
+        background: #f9fafb;
+        padding: 15px 20px;
+        text-align: left;
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: 600;
+        border-bottom: 1px solid #e5e7eb;
+        position: static; /* Remove any absolute/flex that may cause overlap */
+        text-align: center;
+      }
+      .header-badge {
+        display: inline-block;
+        background: #e3efff;
+        color: #2388ff;
+        font-weight: 600;
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 4px 12px;
+        margin: 0 auto;
+        min-width: 70px;
+        text-align: center;
+      }
+      .header-badge1 {
+        display: inline-block;
+        background: #e3efff;
+        color: #2388ff;
+        font-weight: 600;
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 4px 12px;
+        margin: 0 auto;
+        min-width: 70px;
+        /* text-align: center; */
+      }
+
+      .invoice-table th:last-child {
+        text-align: right;
+      }
+
+      .invoice-table td {
+        padding: 15px 20px;
+        font-size: 14px;
+        border-bottom: 1px solid #f3f4f6;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
+        max-width: 250px;
+      }
+      .invoice-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+      }
+      .table-container {
+        margin-bottom: 30px;
+        background: white;
+        border-radius: 8px;
+        overflow-x: auto;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .item-name, .client-name, .client-info {
+        word-break: break-word;
+        overflow-wrap: break-word;
+      }
+      .bill-date-section, .footer {
+        flex-wrap: wrap;
+      }
+
+      .invoice-table td:last-child {
+        text-align: right;
+        font-weight: bold;
+        color: #111827;
+      }
+
+      .item-name {
+        color: #19213d;
+        font-weight: 600;
+      }
+
+      .quantity,
+      .price {
+        color: #5d6481;
+        text-align: center;
+        font-weight: 600;
+
+      }
+
+      /* Summary Section */
+      .summary-section {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 30px;
+      }
+
+      .summary-box {
+        background: #2388ff;
+        color: white;
+        padding: 20px;
+        border-radius: 20px;
+        width: 370px;
+      }
+
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .summary-item:last-child {
+        margin-bottom: 0;
+        /* padding-top: 15px; */
+        /* border-top: 1px solid rgba(255, 255, 255, 0.2); */
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+      }
+
+      .summary-label {
+        margin-bottom: 10px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .summary-value {
+        color: white;
+        font-weight: 500;
+      }
+
+      /* Footer */
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+        padding: 20px 0;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .footer-left {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .footer-brand {
+        font-size: 16px;
+        font-weight: bold;
+        color: #111827;
+      }
+
+      .footer-details {
+        font-size: 12px;
+        color: #6b7280;
+        line-height: 1.4;
+      }
+
+      .footer-logo {
+        width: 40px;
+        height: 30px;
+        background: #10b981;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+        position: relative;
+      }
+
+      .footer-logo-text {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+
+      /* Print Styles */
+      @media print {
+        body {
+          margin: 0;
+          padding: 0;
+        }
+
+        .invoice-container {
+          width: 210mm;
+          height: 330mm;
+          margin: 0;
+          padding: 20mm;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-container">
+      <!-- Floating Logo Box: Move this OUTSIDE the header div -->
+      <div class="floating-logo-container">
+        <div class="logo-box">
+          <img
+            src="/public/mint-invoice-icon.png"
+            alt="Logo"
+            class="logo-image"
+          />
+        </div>
+        <div class="logo-label">Invoice Maker</div>
+      </div>
+      <!-- Header -->
+      <div class="header">
+        <div class="header-top">
+          <!-- Remove floating-logo-container from here -->
+          <div class="logo-section">
+            <!-- (You can remove the floating-logo-container from here) -->
+          </div>
+          <div class="company-info">
+            <div class="company-left">
+              <div class="company-title">Mint Invoice</div>
+              <div class="company-details">www.mintinvoice.com</div>
+              <div class="company-details">(684) 879-0102</div>
+            </div>
+
+            <div class="company-address">
+              Pablo Alto, San Francisco, CA 94109,<br />
+              United States of America
+            </div>
+          </div>
+
+          <div class="invoice-number">N°: 000027</div>
+        </div>
+      </div>
+
+      <!-- Bill To and Date Section -->
+      <div class="bill-date-section">
+        <div class="bill-to-section">
+          <div class="section-title">
+            <div class="section-icon">👤</div>
+            Bill To:
+          </div>
+          <div class="client-info">
+            <div class="client-name">Mauro Sicard</div>
+            <div>Pablo Alto, San Francisco, CA 92102,</div>
+            <div>United States of America</div>
+            <div>(612) 856-0989</div>
+            <div>contact@maurosicard.com</div>
+          </div>
+        </div>
+        <div class="bill-to-section">
+          <div class="section-title">
+            <div class="section-icon">📅</div>
+            Date:
+          </div>
+          <div class="client-info">
+            <div>Invoice date: June 26, 2024</div>
+            <div>Due date: July 26, 2024</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Section -->
+      <div class="table-container">
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th><span class="header-badge1">Itemm</span></th>
+              <th><span class="header-badge">Quantity</span></th>
+              <th><span class="header-badge">Price</span></th>
+              <th><span class="header-badge">Total</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="item-name">Web design</td>
+              <td class="quantity">1</td>
+              <td class="price">$5,250.00</td>
+              <td>$5,250.00</td>
+            </tr>
+            <tr>
+              <td class="item-name">Brand book design</td>
+              <td class="quantity">1</td>
+              <td class="price">$2,750.00</td>
+              <td>$2,750.00</td>
+            </tr>
+            <tr>
+              <td class="item-name">UI/UX app design</td>
+              <td class="quantity">1</td>
+              <td class="price">$7,520.00</td>
+              <td>$7,520.00</td>
+            </tr>
+            <tr>
+              <td class="item-name">Speed optimization</td>
+              <td class="quantity">1</td>
+              <td class="price">$2,800.00</td>
+              <td>$2,800.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Summary Section -->
+      <div class="summary-section">
+        <div class="summary-box">
+          <div class="summary-item">
+            <span class="summary-label">Subtotal</span>
+            <span class="summary-value">$18,320.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">TAX</span>
+            <span class="summary-value">$916.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Invoice Total</span>
+            <span class="summary-value">$19,236.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-left">
+          <div class="footer-brand">Mint Invoice</div>
+          <div class="footer-details">
+            www.mintinvoice.com<br />
+            contact@mintinvoice.com<br />
+            / (684) 879-0102
+          </div>
+        </div>
+
+        <div class="footer-logo">
+          <!-- <div style="font-size: 10px">S</div>
+          <div class="footer-logo-text">INVOICE</div> -->
+          <img class="footer-logo-text" src="/public/mint-invoice-icon.png" alt="">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

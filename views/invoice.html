@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Your Invoice</title>
+    <style>
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color: #f7f8fa;
+        padding: 20px;
+        color: #333;
+      }
+
+      .invoice-container {
+        max-width: 700px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .header h2 {
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .details,
+      .summary {
+        margin-bottom: 30px;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .row strong {
+        display: inline-block;
+        min-width: 120px;
+      }
+
+      .invoice-preview {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 20px;
+      }
+
+      .invoice-preview img {
+        width: 100%;
+        display: block;
+      }
+
+      .cta {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .cta a {
+        display: inline-block;
+        background-color: #28a745;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .footer {
+        font-size: 13px;
+        color: #999;
+        margin-top: 40px;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="invoice-container">
+      <div class="header">
+        <h2>Invoice</h2>
+        <p>Thanks for your business!</p>
+      </div>
+
+      <div class="details">
+        <div class="row">
+          <strong>From:</strong> <span>Mint Invoice</span>
+        </div>
+        <div class="row"><strong>To:</strong> <span><%= email %></span></div>
+
+      </div>
+
+      <div class="summary">
+        <p>Attached below is your invoice preview:</p>
+      </div>
+
+      <div class="invoice-preview">
+        <img src="<%= url %>" alt="Invoice Preview" />
+      </div>
+
+      <div class="cta">
+        <a href="<%= url %>" target="_blank">Download</a>
+      </div>
+    </div>
+  </body>
+</html>
