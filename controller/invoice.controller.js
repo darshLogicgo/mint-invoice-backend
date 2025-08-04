@@ -62,6 +62,7 @@ const createInvoice = async (req, res) => {
       template,
       status,
       emailToPreview,
+      notes,
     } = req.body;
 
     const userId = req.user._id;
@@ -152,6 +153,7 @@ const createInvoice = async (req, res) => {
       logo: logoUrl,
       signature: signatureUrl,
       emailToPreview,
+      notes,
       discount: parsedDiscount,
       currency,
       template: parsedTemplate,
@@ -279,6 +281,7 @@ const updateInvoice = async (req, res) => {
       template,
       status,
       emailToPreview,
+      notes,
     } = req.body;
 
     const invoice = await Invoice.findById(req.params.id);
@@ -368,6 +371,7 @@ const updateInvoice = async (req, res) => {
       total,
       balanceDue,
       emailToPreview,
+      notes,
       discount: parsedDiscount,
       currency,
       template: parsedTemplate,

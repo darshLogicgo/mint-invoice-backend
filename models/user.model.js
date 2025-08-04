@@ -48,9 +48,11 @@ const userSchema = new mongoose.Schema({
       type: String,
       enum: Object.values(enumConfig.subscriptionStatusEnums),
       default: enumConfig.subscriptionStatusEnums.INACTIVE,
+      },
     },
   },
-});
+  { timestamps: true }
+);
 
 const UserModel = mongoose.model("User", userSchema);
 export default UserModel;

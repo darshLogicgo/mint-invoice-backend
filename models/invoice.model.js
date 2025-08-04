@@ -19,17 +19,17 @@ const InvoiceSchema = new mongoose.Schema(
     invoiceNumber: { type: String, required: true },
 
     from: {
-      name: { type: String, default: null }, 
+      name: { type: String, default: null },
       email: { type: String, default: null },
       address: { type: String, default: null },
       phone: { type: String, default: null },
-      businessNumber: { type: String , default: null},
+      businessNumber: { type: String, default: null },
       website: { type: String, default: null },
       owner: { type: String, default: null },
     },
 
     billTo: {
-      name: { type: String, default: null},
+      name: { type: String, default: null },
       email: { type: String, default: null },
       address: { type: String, default: null },
       phone: { type: String, default: null },
@@ -37,7 +37,7 @@ const InvoiceSchema = new mongoose.Schema(
       fax: { type: String, default: null },
     },
 
-    invoiceDate: { type: Date},
+    invoiceDate: { type: Date },
     dueDate: { type: Date },
 
     items: [ItemSchema],
@@ -75,17 +75,19 @@ const InvoiceSchema = new mongoose.Schema(
 
     InvoiceUrl: {
       type: String,
-      default: null
+      default: null,
     },
 
     status: {
       type: String,
       enum: Object.values(enumConfig.invoiceStatusEnums),
-      default: null
-    }
+      default: null,
+    },
+
+    notes: { type: [String], default: [] },
   },
   { timestamps: true }
 );
 
 const InvoiceModel = mongoose.model("Invoice", InvoiceSchema);
-export default InvoiceModel
+export default InvoiceModel;
