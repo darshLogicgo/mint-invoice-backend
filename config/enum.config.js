@@ -4,7 +4,7 @@ const nodeEnvEnums = {
 };
 
 const discountTypeEnums = {
-  NULL: null,
+  NONE: "none",
   FLAT: "flat",
   PERCENTAGE: "percentage",
 };

@@ -54,7 +54,7 @@ const InvoiceSchema = new mongoose.Schema(
       type: {
         type: String,
         enum: Object.values(enumConfig.discountTypeEnums),
-        default: enumConfig.discountTypeEnums.NULL,
+        default: enumConfig.discountTypeEnums.NONE,
       },
       value: { type: Number, default: 0 },
     },
