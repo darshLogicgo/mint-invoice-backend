@@ -20,7 +20,7 @@ const paginationFun = (data) => {
 };
 
 // ------------- Token -------------
-const generateToken = async (payload, expiresIn = "7d") => {
+const generateToken = async (payload, expiresIn = "30d") => {
   return jwt.sign(payload, config.jwt.secretKey, {
     expiresIn: expiresIn,
   });
