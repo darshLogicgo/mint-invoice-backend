@@ -133,6 +133,8 @@ const createInvoice = async (req, res) => {
       discountAmount = (parsedDiscount.value / 100) * subtotal;
     } else if (parsedDiscount?.type === "flat") {
       discountAmount = parsedDiscount.value || 0;
+    } else if (parsedDiscount?.type === "none" || !parsedDiscount?.type) {
+      discountAmount = 0;
     }
 
     const total = subtotal - discountAmount;
@@ -352,6 +354,8 @@ const updateInvoice = async (req, res) => {
       discountAmount = (parsedDiscount.value / 100) * subtotal;
     } else if (parsedDiscount?.type === "flat") {
       discountAmount = parsedDiscount.value || 0;
+    } else if (parsedDiscount?.type === "none" || !parsedDiscount?.type) {
+      discountAmount = 0;
     }
 
     const total = subtotal - discountAmount;
