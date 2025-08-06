@@ -269,8 +269,6 @@ const updateInvoice = async (req, res) => {
       InvoiceUrl: InvoiceUrlFile,
     } = req.files || {};
 
-    console.log("logo", logoFile);
-
     const {
       invoiceNumber,
       from,
@@ -292,6 +290,15 @@ const updateInvoice = async (req, res) => {
         res,
         statusCode: StatusCodes.NOT_FOUND,
         message: "Invoice not found",
+      });
+    }
+
+    // Check if invoice is locked (downloaded or shared)
+    if (invoice.isLocked) {
+      return apiResponse({
+        res,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: `Invoice has been ${invoice.lockedReason.toLowerCase()} and cannot be update.`,
       });
     }
 
@@ -359,7 +366,7 @@ const updateInvoice = async (req, res) => {
     }
 
     const total = subtotal - discountAmount;
-    const balanceDue = total; 
+    const balanceDue = total;
 
     const finalStatus = status === null || status === "null" ? null : status;
 
@@ -450,7 +457,7 @@ const deleteInvoice = async (req, res) => {
 
 const sendInvoiceToEmail = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, invoiceId } = req.body;
     const file = req.file;
 
     if (!file) {
@@ -469,6 +476,32 @@ const sendInvoiceToEmail = async (req, res) => {
       });
     }
 
+    if (!invoiceId) {
+      return apiResponse({
+        res,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "Invoice ID is required",
+      });
+    }
+
+    // Check if invoice exists and is not already locked
+    const invoice = await Invoice.findById(invoiceId);
+    if (!invoice) {
+      return apiResponse({
+        res,
+        statusCode: StatusCodes.NOT_FOUND,
+        message: "Invoice not found",
+      });
+    }
+
+    if (invoice.isLocked) {
+      return apiResponse({
+        res,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: `Invoice has been ${invoice.lockedReason.toLowerCase()} and cannot be share again.`,
+      });
+    }
+
     // ✅ Upload file to S3 or DigitalOcean Spaces
     const uploadedUrl = await fileService.uploadFile({
       buffer: file.buffer,
@@ -481,6 +514,12 @@ const sendInvoiceToEmail = async (req, res) => {
       url: uploadedUrl,
       email,
     });
+
+    // Lock the invoice after sharing
+    invoice.isLocked = true;
+    invoice.lockedAt = new Date();
+    invoice.lockedReason = "shared";
+    await invoice.save();
 
     return apiResponse({
       res,
@@ -537,7 +576,7 @@ const generatePDF = async (req, res) => {
       headless: "new",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-    
+
     const page = await browser.newPage();
 
     await page.setContent(html, {
@@ -555,7 +594,7 @@ const generatePDF = async (req, res) => {
       "Content-Type": "application/pdf",
       "Content-Disposition": 'attachment; filename="invoice.pdf"',
     });
-    
+
     res.send(pdfBuffer);
   } catch (error) {
     console.error("PDF generation error:", error);
@@ -563,6 +602,59 @@ const generatePDF = async (req, res) => {
       res,
       statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
       message: "Failed to generate PDF",
+      error: error.message,
+    });
+  }
+};
+
+const downloadInvoice = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return apiResponse({
+        res,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "Invoice ID is required",
+      });
+    }
+
+    // Check if invoice exists and is not already locked
+    const invoice = await Invoice.findById(id);
+    if (!invoice) {
+      return apiResponse({
+        res,
+        statusCode: StatusCodes.NOT_FOUND,
+        message: "Invoice not found",
+      });
+    }
+
+    if (invoice.isLocked) {
+      return apiResponse({
+        res,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: `Invoice has been ${invoice.lockedReason.toLowerCase()} and cannot be download again.`,
+      });
+    }
+
+    // Lock the invoice after download
+    invoice.isLocked = true;
+    invoice.lockedAt = new Date();
+    invoice.lockedReason = "downloaded";
+    await invoice.save();
+
+    // Return success response
+    return apiResponse({
+      res,
+      statusCode: StatusCodes.OK,
+      message: "Invoice downloaded successfully",
+      data: null,
+    });
+  } catch (error) {
+    return apiResponse({
+      res,
+      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+      message: "Failed to download invoice",
       error: error.message,
     });
   }
@@ -577,4 +669,5 @@ export default {
   sendInvoiceToEmail,
   getInvoiceHistory,
   generatePDF,
+  downloadInvoice,
 };

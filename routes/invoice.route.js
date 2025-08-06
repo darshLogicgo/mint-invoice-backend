@@ -51,4 +51,7 @@ router.post(
 // Generate PDF from HTML
 router.post("/generate-pdf", verifyToken, invoiceController.generatePDF);
 
+// Download invoice (locks the invoice)
+router.post("/:id/download", verifyToken, invoiceController.downloadInvoice);
+
 export default router;

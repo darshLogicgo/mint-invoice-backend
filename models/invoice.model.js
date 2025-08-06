@@ -78,6 +78,15 @@ const InvoiceSchema = new mongoose.Schema(
       default: null,
     },
 
+    // Track if invoice has been downloaded or shared (either action locks the invoice)
+    isLocked: { type: Boolean, default: false },
+    lockedAt: { type: Date, default: null },
+    lockedReason: {
+      type: String,
+      enum: Object.values(enumConfig.lockedReasonEnums),
+      default: null,
+    },
+
     status: {
       type: String,
       enum: Object.values(enumConfig.invoiceStatusEnums),

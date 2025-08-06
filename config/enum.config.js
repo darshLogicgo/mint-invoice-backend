@@ -96,6 +96,11 @@ const subscriptionStatusEnums = {
   EXPIRED: "expired",
 };
 
+const lockedReasonEnums = {
+  DOWNLOADED: "downloaded",
+  SHARED: "shared",
+};
+
 export default {
   nodeEnvEnums,
   discountTypeEnums,
@@ -108,4 +113,5 @@ export default {
   subscriptionStatusEnums,
   razorpayPlanIds,
   planLimits,
+  lockedReasonEnums,
 };
