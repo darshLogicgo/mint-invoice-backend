@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Download</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .invoice-number {
+            text-align: right;
+            color: #000000;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .content-box {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .top-bar {
+            background-color: #22c55e; /* Green color */
+            height: 8px;
+            width: 100%;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .invoice-total {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 15px;
+        }
+        
+        .instruction-text {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 30px;
+        }
+        
+        .download-button {
+            background-color: #22c55e; /* Green color */
+            color: #ffffff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .download-button:hover {
+            background-color: #16a34a;
+        }
+        
+        .troubleshooting {
+            font-size: 12px;
+            color: #888888;
+            margin-bottom: 10px;
+        }
+        
+        .troubleshooting-link {
+            font-size: 12px;
+            color: #007bff;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
+            margin-top: 20px;
+        }
+        
+        .footer-email {
+            color: #007bff;
+            text-decoration: underline;
+        }
+        
+        .logo {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #888888;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .invoice-total {
+                font-size: 28px;
+            }
+            
+            .download-button {
+                padding: 12px 30px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="invoice-number">
+            Invoice# {{invoiceNumber}}
+        </div>
+        
+        <div class="content-box">
+            <div class="top-bar"></div>
+            <div class="content">
+                <div class="invoice-total">
+                    Invoice total {{total}}
+                </div>
+                
+                <div class="instruction-text">
+                    Your invoice is ready for download, click below to download the PDF.
+                </div>
+                
+                <a href="{{downloadUrl}}" class="download-button" style="text-decoration: none; display: inline-block;">
+                    DOWNLOAD
+                </a>
+                
+                <div class="troubleshooting">
+                    Trouble viewing invoice? Copy/paste the URL below into your browser:
+                </div>
+                
+                <div class="troubleshooting-link">
+                    {{downloadUrl}}
+                </div>
+            </div>
+        </div>
+        
+        <!-- <div class="footer">
+            This message was sent by <span class="footer-email">{{senderEmail}}</span><br>
+            - {{senderName}}
+        </div>
+        
+        <div class="logo">
+            Mint Invoice Logo
+        </div> -->
+    </div>
+</body>
+</html> 

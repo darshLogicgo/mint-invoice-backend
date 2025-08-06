@@ -9,6 +9,9 @@ import fileService from "../upload/service.js";
 import { sendEmail } from "../helper/mail.js";
 import InvoiceHistory from "../models/invoice-history.model.js";
 import puppeteer from "puppeteer";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Helper to upload a file to S3 and return the URL
 async function handleUpload(file, oldUrl, folder) {
@@ -498,7 +501,7 @@ const sendInvoiceToEmail = async (req, res) => {
       return apiResponse({
         res,
         statusCode: StatusCodes.BAD_REQUEST,
-        message: `Invoice has been ${invoice.lockedReason.toLowerCase()} and cannot be share again.`,
+        message: `Invoice has been ${invoice.lockedReason.toLowerCase()} and cannot be shared.`,
       });
     }
 
@@ -510,9 +513,24 @@ const sendInvoiceToEmail = async (req, res) => {
       folderName: "invoices",
     });
 
+      // Read the HTML template
+    
+    
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const templatePath = path.join(__dirname, '..', 'views', 'invoice-download.html');
+    let htmlTemplate = fs.readFileSync(templatePath, 'utf8');
+    
+    // Replace placeholders with actual data
+    htmlTemplate = htmlTemplate
+      .replace(/{{invoiceNumber}}/g, invoice.invoiceNumber)
+      .replace(/{{total}}/g, invoice.total)
+      .replace(/{{downloadUrl}}/g, uploadedUrl)
+    
     await sendEmail(email, "Your Invoice is Ready", "invoice", {
       url: uploadedUrl,
       email,
+      htmlContent: htmlTemplate
     });
 
     // Lock the invoice after sharing
@@ -633,7 +651,7 @@ const downloadInvoice = async (req, res) => {
       return apiResponse({
         res,
         statusCode: StatusCodes.BAD_REQUEST,
-        message: `Invoice has been ${invoice.lockedReason.toLowerCase()} and cannot be download again.`,
+        message: `Invoice has been ${invoice.lockedReason.toLowerCase()} and cannot be download.`,
       });
     }
 
@@ -647,7 +665,7 @@ const downloadInvoice = async (req, res) => {
     return apiResponse({
       res,
       statusCode: StatusCodes.OK,
-      message: "Invoice downloaded successfully",
+      message: "Invoice Download successfully",
       data: null,
     });
   } catch (error) {

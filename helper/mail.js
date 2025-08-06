@@ -71,14 +71,22 @@ export const sendEmail = async (
   attachments = []
 ) => {
   try {
-    const templatePath = path.resolve(
-      __dirname,
-      `../views/${templateName}.html`
-    );
+    let emailTemplate;
+    
+    // If custom HTML content is provided, use it directly
+    if (templateData.htmlContent) {
+      emailTemplate = templateData.htmlContent;
+    } else {
+      // Otherwise use the template file
+      const templatePath = path.resolve(
+        __dirname,
+        `../views/${templateName}.html`
+      );
 
-    const emailTemplate = await ejs.renderFile(templatePath, templateData, {
-      async: true, 
-    });
+      emailTemplate = await ejs.renderFile(templatePath, templateData, {
+        async: true, 
+      });
+    }
 
     const mailOptions = {
       from: env.email.from,
